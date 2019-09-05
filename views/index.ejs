@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Group Chat on Node.js</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font: 13px Helvetica, Arial;
+      }
+
+      #chatter_list {
+        float: left;
+        padding: 30px;
+        width: 300px;
+        height: 800px;
+        overflow: scroll;
+        border: 1px solid green;
+      }
+
+      #chatter_ul {
+        list-style-type: none;
+        color: blue;
+      }
+
+      #chatter_ul li {
+        padding: 5px;
+        cursor: pointer;
+      }
+
+      #chatter_ul li:hover {
+        background: lightgray;
+      }
+
+      form {
+        background: #fff;
+        padding: 3px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        border-color: #000;
+        border-top-style: solid;
+        border-top-width: 1px;
+      }
+      form input {
+        border-style: solid;
+        border-width: 1px;
+        padding: 10px;
+        width: 85%;
+        margin-right: 0.5%;
+      }
+      form button {
+        width: 9%;
+        background: rgb(130, 224, 255);
+        border: none;
+        padding: 10px;
+        margin-left: 2%;
+      }
+      #messages {
+        list-style-type: none;
+        margin: 0;
+        padding: 30px;
+        float: left;
+      }
+      #messages li {
+        padding: 5px 10px;
+      }
+      #messages li:nth-child(odd) {
+        background: #eee;
+      }
+    </style>
+    <script src="../../socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  </head>
+  <body>
+    <div id="chatter_list">
+      Chatter List <br /><br />
+      <ul id="chatter_ul"></ul>
+    </div>
+    <ul id="messages"></ul>
+    <form action="/" method="POST" id="chatForm">
+      <input
+        id="txt"
+        autocomplete="off"
+        autofocus="on"
+        oninput="isTyping()"
+        placeholder="type your message here..."
+      /><button>Send</button>
+    </form>
+    <script>
+      // submit text message without reload/refresh the page
+      var socket = io.connect("http://localhost:8080");
+
+      $("form").submit(function(e) {
+        e.preventDefault(); // prevents page reloading
+        socket.emit("chat_message", $("#txt").val());
+        $("#txt").val("");
+        return false;
+      });
+
+      socket.on("chat_message", function(msg) {
+        $("#messages").append($("<li>").html(msg));
+      });
+
+      socket.on("is_online", function(username) {
+        $("#messages").append($("<li>").html(username));
+      });
+
+      socket.on("chatter_list", function(data) {
+        var i;
+        $("#chatter_ul").html("");
+        for (i = 0; i < data.length; i++) {
+          var str = "<li>" + data[i] + "</li>";
+          $("#chatter_ul").append(str);
+        }
+      });
+
+      var username = prompt("Please tell me your name.");
+
+      socket.emit("username", username);
+      setInterval(function() {
+        socket.emit("username", username);
+      }, 3000);
+    </script>
+  </body>
+</html>
