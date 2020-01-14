@@ -3,6 +3,7 @@ const app = express();
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
 
+//Chatter List
 var chatter_list = [];
 var room_list = ["room no1", "room no2", "room no3"];
 
