@@ -22,6 +22,7 @@ function addToChatterList(username) {
   return false;
 }
 
+//Delete a chatter from List
 function removeChatter(username) {
   var index = chatter_list.indexOf(username);
   if (index > -1) {
