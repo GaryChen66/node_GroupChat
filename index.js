@@ -13,6 +13,7 @@ app.get("/", function(req, res) {
   res.render("index.ejs");
 });
 
+//Add New Chatter
 function addToChatterList(username) {
   if (chatter_list.indexOf(username) == -1) {
     chatter_list.push(username);
