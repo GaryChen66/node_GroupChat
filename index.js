@@ -8,6 +8,7 @@ const io = require("socket.io")(http);
 var chatter_list = [];
 var room_list = ["room no1", "room no2", "room no3"];
 
+//App Routing
 app.get("/", function(req, res) {
   res.render("index.ejs");
 });
