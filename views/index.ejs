@@ -23,16 +23,13 @@
         list-style-type: none;
         color: blue;
       }
-
       #chatter_ul li {
         padding: 5px;
         cursor: pointer;
       }
-
       #chatter_ul li:hover {
         background: lightgray;
       }
-
       form {
         background: #fff;
         padding: 3px;
@@ -116,8 +113,8 @@
         }
       });
 
+      //Get User List per 3 seconds
       var username = prompt("Please tell me your name.");
-
       socket.emit("username", username);
       setInterval(function() {
         socket.emit("username", username);
